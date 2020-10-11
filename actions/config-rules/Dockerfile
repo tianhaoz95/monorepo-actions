@@ -4,4 +4,4 @@ WORKDIR /action
 
 COPY . .
 
-ENTRYPOINT ["python", "entrypoint.py"]
+ENTRYPOINT ["python", "/action/entrypoint.py"]
