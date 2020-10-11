@@ -5,7 +5,7 @@ on:
       - "master"
     paths:
       - ".github/workflows/push-action__publish-config-rules.yml"
-      - "actions/config-rules/**"
+      - "actions/config-rules/*"
 jobs:
   publish-config-rules:
     runs-on: ubuntu-latest
