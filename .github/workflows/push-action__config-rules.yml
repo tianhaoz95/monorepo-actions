@@ -1,0 +1,21 @@
+name: Push the Config Rules action to destination repository
+on:
+  push:
+    branches:
+      - "master"
+    paths:
+      - ".github/workflows/push-action__config-rules.yml"
+      - "actions/config-rules/**"
+jobs:
+  push-config-rules:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: cpina/github-action-push-to-another-repository@master
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.TIANHAOZ_GITHUB_TOKEN }}
+        with:
+          source-directory: "actions/config-rules"
+          destination-github-username: "Monorepo-Actions"
+          destination-repository-name: "config-rules"
+          user-email: tianhaoz@umich.edu
