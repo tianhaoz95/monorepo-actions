@@ -1,0 +1,14 @@
+name: Test the Config Rules action
+on:
+  push:
+    paths:
+      - ".github/workflows/test-action__config-rules.yml"
+      - "actions/config-rules/*"
+jobs:
+  sanity-check-config-rules:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./actions/config-rules
+        with:
+          rule_config: ./actions/config-rules/example-config.yml

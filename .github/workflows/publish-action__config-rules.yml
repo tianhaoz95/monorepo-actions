@@ -4,7 +4,7 @@ on:
     branches:
       - "main"
     paths:
-      - ".github/workflows/push-action__publish-config-rules.yml"
+      - ".github/workflows/publish-action__config-rules.yml"
       - "actions/config-rules/*"
 jobs:
   publish-config-rules:
