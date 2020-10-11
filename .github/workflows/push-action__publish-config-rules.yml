@@ -1,13 +1,13 @@
-name: Push the Config Rules action to destination repository
+name: Publish the Config Rules action to destination repository
 on:
   push:
     branches:
       - "master"
     paths:
-      - ".github/workflows/push-action__config-rules.yml"
+      - ".github/workflows/push-action__publish-config-rules.yml"
       - "actions/config-rules/**"
 jobs:
-  push-config-rules:
+  publish-config-rules:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
