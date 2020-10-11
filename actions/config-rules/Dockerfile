@@ -6,4 +6,6 @@ COPY . .
 
 RUN pip install -r requirements.txt
 
-ENTRYPOINT ["/action/entrypoint.sh"]
+RUN ls /action
+
+ENTRYPOINT ["python", "/action/cli.py"]
