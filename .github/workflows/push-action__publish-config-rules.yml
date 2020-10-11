@@ -2,7 +2,7 @@ name: Publish the Config Rules action to destination repository
 on:
   push:
     branches:
-      - "master"
+      - "main"
     paths:
       - ".github/workflows/push-action__publish-config-rules.yml"
       - "actions/config-rules/*"
