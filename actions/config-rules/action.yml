@@ -1,0 +1,15 @@
+name: 'Config Rules'
+description: 'Enforces arbitrary rules on configuration files.'
+branding:
+  icon: check-square
+  color: green
+inputs:
+  rule_config:
+    description: 'The filename of the rule configuration'
+    default: '.github/config-rules.yml'
+    required: true
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.rule_config }}
