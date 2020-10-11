@@ -4,4 +4,6 @@ WORKDIR /action
 
 COPY . .
 
-ENTRYPOINT ["python", "/action/entrypoint.py"]
+RUN pip install requirements.txt
+
+ENTRYPOINT ["/action/entrypoint.sh"]

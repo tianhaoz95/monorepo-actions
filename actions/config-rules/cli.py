@@ -1,3 +1,5 @@
+from yaml import load
+
 def main():
     print('Hello World!')
 
