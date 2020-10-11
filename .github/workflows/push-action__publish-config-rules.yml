@@ -16,6 +16,8 @@ jobs:
           API_TOKEN_GITHUB: ${{ secrets.TIANHAOZ_GITHUB_TOKEN }}
         with:
           source-directory: "actions/config-rules"
-          destination-github-username: "Monorepo-Actions"
+          destination-repository-username: "Monorepo-Actions"
+          destination-github-username: "tianhaoz95"
           destination-repository-name: "config-rules"
-          user-email: tianhaoz@umich.edu
+          target-branch: "main"
+          user-email: "tianhaoz@umich.edu"
