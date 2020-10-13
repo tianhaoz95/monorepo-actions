@@ -1,23 +1,26 @@
-name: Publish the Config Rules action to destination repository
+name: Publish the Config for Actions action to destination repository
 on:
   push:
     branches:
       - "main"
     paths:
-      - ".github/workflows/publish-action__config-rules.yml"
-      - "actions/config-rules/**"
+      - ".github/workflows/publish-action__config-for-actions.yml"
+      - "actions/config-for-actions/**"
 jobs:
   publish-config-rules:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: install dependencies
+        working-directory: ./actions/config-for-actions
+        run: npm install && npm run build
       - uses: cpina/github-action-push-to-another-repository@master
         env:
           API_TOKEN_GITHUB: ${{ secrets.TIANHAOZ_GITHUB_TOKEN }}
         with:
-          source-directory: "actions/config-rules"
+          source-directory: "actions/config-for-actions"
           destination-repository-username: "Monorepo-Actions"
           destination-github-username: "tianhaoz95"
-          destination-repository-name: "config-rules"
+          destination-repository-name: "config-for-actions"
           target-branch: "main"
           user-email: "tianhaoz@umich.edu"
