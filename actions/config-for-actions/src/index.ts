@@ -1,5 +1,5 @@
-import core from '@actions/core';
-import glob from '@actions/glob';
+import * as core from '@actions/core';
+import * as glob from '@actions/glob';
 
 const main = async (): Promise<void> => {
     const globOptions = {
