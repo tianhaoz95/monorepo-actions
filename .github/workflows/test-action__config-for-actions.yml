@@ -13,5 +13,10 @@ jobs:
         working-directory: ./actions/config-for-actions
         run: npm install && npm run build
       - uses: ./actions/config-for-actions
+        id: sanity_check
         with:
           config_files: ./actions/config-for-actions/fixture/sample-config.json
+      - name: check output
+        run: |
+          echo "${{ steps.sanity_check.outputs.config_name_1 }}"
+          echo "${{ steps.sanity_check.outputs.config_name_2 }}"
