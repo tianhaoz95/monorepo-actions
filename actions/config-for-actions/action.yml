@@ -1,0 +1,13 @@
+name: 'Config for Actions'
+description: 'Reusable configuration for all GitHub Actions workflows.'
+branding:
+  icon: check-square
+  color: green
+inputs:
+  config_files:
+    description: 'The configuration files.'
+    default: '.github/config-for-actions.yml'
+    required: true
+runs:
+  using: 'node12'
+  main: 'index.js'

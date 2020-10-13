@@ -1,0 +1,17 @@
+name: Test the Config Rules action
+on:
+  push:
+    paths:
+      - ".github/workflows/test-action__config-for-actions.yml"
+      - "actions/config-for-actions/*"
+jobs:
+  sanity-check-config-rules:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: install dependencies
+        working-directory: ./actions/config-for-actions
+        run: npm install && npm run build
+      - uses: ./actions/config-for-actions
+        with:
+          config_files: ./actions/config-for-actions/fixture/sample-config.json
