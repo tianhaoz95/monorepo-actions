@@ -3,7 +3,7 @@ on:
   push:
     paths:
       - ".github/workflows/test-action__config-for-actions.yml"
-      - "actions/config-for-actions/*"
+      - "actions/config-for-actions/**"
 jobs:
   sanity-check-config-rules:
     runs-on: ubuntu-latest
