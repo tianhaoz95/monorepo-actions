@@ -1,0 +1,14 @@
+name: Test the File Dup action
+on:
+  push:
+    paths:
+      - ".github/workflows/test-action__file-dup-action.yml"
+      - "actions/file-dup-action/**"
+jobs:
+  sanity-check-config-rules:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: install dependencies
+        working-directory: ./actions/file-dup-action
+        run: npm install && npm run build
