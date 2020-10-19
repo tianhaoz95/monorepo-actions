@@ -1,0 +1,26 @@
+name: Publish the File Dup action to destination repository
+on:
+  push:
+    branches:
+      - "main"
+    paths:
+      - ".github/workflows/publish-action__file-dup-action.yml"
+      - "actions/file-dup-action/**"
+jobs:
+  publish-config-rules:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: install dependencies
+        working-directory: ./actions/file-dup-action
+        run: npm install && npm run build
+      - uses: cpina/github-action-push-to-another-repository@master
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.TIANHAOZ_GITHUB_TOKEN }}
+        with:
+          source-directory: "actions/file-dup-action"
+          destination-repository-username: "Monorepo-Actions"
+          destination-github-username: "tianhaoz95"
+          destination-repository-name: "file-dup-action"
+          target-branch: "main"
+          user-email: "tianhaoz@umich.edu"
