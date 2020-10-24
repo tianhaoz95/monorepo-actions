@@ -80,7 +80,9 @@ const main = async (): Promise<void> => {
         }
     }
     for (const target in globalConfig) {
-        if (await maybeDupFile(target, globalConfig['target'])) {
+        const dupFiles = globalConfig['target'];
+        core.info(`Config entry ${target} => ${JSON.stringify(dupFiles)}`);
+        if (await maybeDupFile(target, dupFiles)) {
             outdated = true;
         }
     }
