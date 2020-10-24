@@ -27,6 +27,7 @@ const maybeDupFile = async (target: string, destFiles: string[]): Promise<boolea
     let outdated = false;
     for (const destFile of destFiles) {
         const destContent = fs.readFileSync(destFile, 'utf8');
+        core.info(`Check the content of ${target} and ${destFile}.`);
         if (targetContent === destContent) {
             core.info(`The content of ${target} and ${destFile} is the same. Skip.`);
         } else {
