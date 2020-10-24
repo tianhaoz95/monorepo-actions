@@ -68,8 +68,8 @@ const main = async (): Promise<void> => {
     for await (const file of (await globber).globGenerator()) {
         core.info(`Use ${file} as a configuration file.`);
         const configContent = fs.readFileSync(file, 'utf8');
+        core.info(`Found config with content: ${configContent}`);
         const parsedConfig: Record<string, string[]> = JSON.parse(configContent);
-        core.info(`Found config with content: ${parsedConfig}`);
         for (const targetFile in parsedConfig) {
             globalConfig[targetFile] = parsedConfig[targetFile];
         }
