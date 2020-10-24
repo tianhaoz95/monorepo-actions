@@ -5,10 +5,18 @@ on:
       - ".github/workflows/test-action__file-dup-action.yml"
       - "actions/file-dup-action/**"
 jobs:
-  sanity-check-config-rules:
+  sanity-check-file-dup-action:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: install dependencies
         working-directory: ./actions/file-dup-action
         run: npm install && npm run build
+      - uses: ./actions/file-dup-action
+        with:
+          username: "tianhaoz95"
+          email: "tianhaoz@umich.edu"
+          token: ${{ secrets.TIANHAOZ_GITHUB_TOKEN }}
+          config_files: "./actions/file-dup-action/example_config.json"
+          method: "pull_request"
+          branch: "chore/dup-files"
