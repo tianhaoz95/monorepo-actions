@@ -20,9 +20,11 @@ const configureGit = async (): Promise<void> => {
     const token = core.getInput('token');
     await io.mkdirP('~/project_temp/file-dup-action/');
     await exec.exec('echo', [token, '>', '~/project_temp/file-dup-action/token.txt']);
+    core.info('Configure git profile.');
     await exec.exec('git', ['config', 'user.email', email]);
     await exec.exec('git', ['config', 'user.name', username]);
     await exec.exec('git', ['config', 'user.password', token]);
+    core.info('Configure GitHub CLI.');
     await exec.exec('gh', ['auth', 'login', '--with-token', '<', '~/project_temp/file-dup-action/token.txt']);
 }
 
