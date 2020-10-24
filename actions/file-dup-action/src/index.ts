@@ -3,6 +3,7 @@ import * as io from '@actions/io';
 import * as glob from '@actions/glob';
 import * as exec from '@actions/exec';
 import fs from 'fs';
+import path from 'path';
 
 const cpOptions = {
     recursive: true,
@@ -23,10 +24,12 @@ const configureGit = async (): Promise<void> => {
 }
 
 const maybeDupFile = async (target: string, destFiles: string[]): Promise<boolean> => {
-    const targetContent = fs.readFileSync(target, 'utf8');
+    const targetContent = fs.readFileSync(
+        path.join(process.env['GITHUB_WORKSPACE'] as string, target), 'utf8');
     let outdated = false;
     for (const destFile of destFiles) {
-        const destContent = fs.readFileSync(destFile, 'utf8');
+        const destContent = fs.readFileSync(
+            path.join(process.env['GITHUB_WORKSPACE'] as string, destFile), 'utf8');
         core.info(`Check the content of ${target} and ${destFile}.`);
         if (targetContent === destContent) {
             core.info(`The content of ${target} and ${destFile} is the same. Skip.`);
