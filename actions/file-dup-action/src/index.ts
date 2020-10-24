@@ -18,9 +18,11 @@ const configureGit = async (): Promise<void> => {
     const email = core.getInput('email');
     const username = core.getInput('username');
     const token = core.getInput('token');
+    await exec.exec('export', [`GITHUB_TOKEN=${token}`]);
     await exec.exec('git', ['config', 'user.email', email]);
     await exec.exec('git', ['config', 'user.name', username]);
     await exec.exec('git', ['config', 'user.password', token]);
+    await exec.exec('gh', ['auth', 'login']);
 }
 
 const maybeDupFile = async (target: string, destFiles: string[]): Promise<boolean> => {
@@ -49,12 +51,12 @@ const uploadChanges = async (): Promise<void> => {
     if (method === 'push') {
         await exec.exec('git', ['add', '-A']);
         await exec.exec('git', ['commit', '-m', 'chore: duplicate files']);
-        await exec.exec('git', ['push', '-u', 'origin']);
+        await exec.exec('git', ['push', '-f', '-u', 'origin']);
     } else if (method === 'pull_request') {
         await exec.exec('git', ['checkout', '-b', branch]);
         await exec.exec('git', ['add', '-A']);
         await exec.exec('git', ['commit', '-m', 'chore: duplicate files']);
-        await exec.exec('git', ['push', '-u', 'origin', branch]);
+        await exec.exec('git', ['push', '-f', '-u', 'origin', branch]);
     } else if (method === 'dry_run') {
         await exec.exec('git', ['checkout', '-b', branch]);
         await exec.exec('git', ['add', '-A']);
