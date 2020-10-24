@@ -18,11 +18,10 @@ const configureGit = async (): Promise<void> => {
     const email = core.getInput('email');
     const username = core.getInput('username');
     const token = core.getInput('token');
-    core.exportVariable('GITHUB_TOKEN', token);
     await exec.exec('git', ['config', 'user.email', email]);
     await exec.exec('git', ['config', 'user.name', username]);
     await exec.exec('git', ['config', 'user.password', token]);
-    await exec.exec('gh', ['auth', 'login']);
+    await exec.exec('gh', ['auth', 'login', '--with-token', token]);
 }
 
 const maybeDupFile = async (target: string, destFiles: string[]): Promise<boolean> => {
