@@ -24,12 +24,14 @@ const configureGit = async (): Promise<void> => {
 }
 
 const maybeDupFile = async (target: string, destFiles: string[]): Promise<boolean> => {
-    const targetContent = fs.readFileSync(
-        path.join(process.env['GITHUB_WORKSPACE'] as string, target), 'utf8');
+    const targetFilename = path.join(process.env['GITHUB_WORKSPACE'] as string, target);
+    core.info(`Read ${targetFilename}.`);
+    const targetContent = fs.readFileSync(targetFilename, 'utf8');
     let outdated = false;
     for (const destFile of destFiles) {
-        const destContent = fs.readFileSync(
-            path.join(process.env['GITHUB_WORKSPACE'] as string, destFile), 'utf8');
+        const destFilename = path.join(process.env['GITHUB_WORKSPACE'] as string, destFile);
+        core.info(`Read ${destFilename}.`);
+        const destContent = fs.readFileSync(destFilename, 'utf8');
         core.info(`Check the content of ${target} and ${destFile}.`);
         if (targetContent === destContent) {
             core.info(`The content of ${target} and ${destFile} is the same. Skip.`);
