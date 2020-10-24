@@ -88,6 +88,15 @@ const main = async (): Promise<void> => {
     }
     if (outdated) {
         await uploadChanges();
+        if (core.getInput('method') === 'pull_request') {
+            await exec.exec('gh', [
+                'pr', 'create',
+                '--base', 'main',
+                '--head', core.getInput('branch') as string,
+                '--title', 'chore: dup file',
+            ]);
+            core.info('Pull request opened.');
+        }
     } else {
         core.info('No change needed. Skip.');
     }
