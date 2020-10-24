@@ -18,10 +18,12 @@ const configureGit = async (): Promise<void> => {
     const email = core.getInput('email');
     const username = core.getInput('username');
     const token = core.getInput('token');
+    await io.mkdirP('/project_temp/file-dup-action/');
+    await exec.exec('echo', [token, '>', '/project_temp/file-dup-action/token.txt']);
     await exec.exec('git', ['config', 'user.email', email]);
     await exec.exec('git', ['config', 'user.name', username]);
     await exec.exec('git', ['config', 'user.password', token]);
-    await exec.exec('gh', ['auth', 'login', '--with-token', token]);
+    await exec.exec('gh', ['auth', 'login', '--with-token', '<', '/project_temp/file-dup-action/token.txt']);
 }
 
 const maybeDupFile = async (target: string, destFiles: string[]): Promise<boolean> => {
