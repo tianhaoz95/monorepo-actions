@@ -18,5 +18,5 @@ jobs:
           email: "tianhaoz@umich.edu"
           token: ${{ secrets.TIANHAOZ_GITHUB_TOKEN }}
           config_files: "actions/file-dup-action/example_config.json"
-          method: "pull_request"
+          method: "dry_run"
           branch: "chore/dup-files"
