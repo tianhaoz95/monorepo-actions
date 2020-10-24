@@ -25,7 +25,7 @@ const configureGit = async (): Promise<void> => {
     await exec.exec('git', ['config', 'user.name', username]);
     await exec.exec('git', ['config', 'user.password', token]);
     core.info('Configure GitHub CLI.');
-    await exec.exec('gh', ['auth', 'login', '--with-token', '<', '${HOME}/project_temp/file-dup-action/token.txt']);
+    await exec.exec('gh auth login --with-token < ${HOME}/project_temp/file-dup-action/token.txt');
 }
 
 const maybeDupFile = async (target: string, destFiles: string[]): Promise<boolean> => {
