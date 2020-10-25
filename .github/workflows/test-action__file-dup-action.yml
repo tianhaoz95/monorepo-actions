@@ -3,6 +3,8 @@ on:
   push:
     paths:
       - ".github/workflows/test-action__file-dup-action.yml"
+      - ".github/workflows/test-action__setup-gh-cli.yml"
+      - "actions/setup-gh-cli/**"
       - "actions/file-dup-action/**"
 jobs:
   sanity-check-file-dup-action:
@@ -12,6 +14,12 @@ jobs:
       - name: install dependencies
         working-directory: ./actions/file-dup-action
         run: npm install && npm run build
+      - name: install dependencies
+        working-directory: ./actions/setup-gh-cli
+        run: npm install && npm run build
+      - uses: ./actions/setup-gh-cli
+        with:
+          token: ${{ secrets.TIANHAOZ_GITHUB_TOKEN }}
       - uses: ./actions/file-dup-action
         with:
           username: "tianhaoz95"
