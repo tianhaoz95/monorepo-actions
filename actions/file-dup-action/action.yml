@@ -21,10 +21,12 @@ inputs:
     description: 'The way to check in change [push|pull_request|dry_run].'
     default: 'pull_request'
     required: true
-  branch:
-    description: 'The branch to push the changes to [default=main].'
-    default: 'pull_request'
-    required: true
+  base:
+    description: 'The base branch to push the changes to [default=default branch].'
+    required: false
+  head:
+    description: 'The branch to push the changes from [default=current branch].'
+    required: false
 runs:
   using: 'node12'
   main: './lib/index.js'

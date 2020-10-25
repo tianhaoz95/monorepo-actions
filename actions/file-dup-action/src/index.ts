@@ -5,6 +5,24 @@ import * as exec from '@actions/exec';
 import fs from 'fs';
 import path from 'path';
 
+interface ActionConfig {
+    method: 'push' | 'pull_request' | 'dry_run',
+    specifyBase: boolean;
+    baseBranch: string;
+    specifyHead: boolean;
+    headBranch: string;
+};
+
+const createDefaultConfig = (): ActionConfig => {
+    return {
+        method: 'pull_request',
+        specifyBase: false,
+        baseBranch: 'default',
+        specifyHead: false,
+        headBranch: 'default',
+    };
+}
+
 const cpOptions = {
     recursive: true,
     force: true,
@@ -45,27 +63,53 @@ const maybeDupFile = async (target: string, destFiles: string[]): Promise<boolea
     return outdated;
 }
 
-const uploadChanges = async (): Promise<void> => {
+const getBaseBranch = (config: ActionConfig): void => {
+    const base = core.getInput('base');
+    if (base === undefined) {
+        config.specifyBase = false;
+    } else {
+        config.specifyBase = true;
+        config.baseBranch = base;
+    }
+}
+
+const getHeadBranch = (config: ActionConfig): void => {
+    const head = core.getInput('head');
+    if (head === undefined) {
+        config.specifyHead = false;
+    } else {
+        config.specifyHead = true;
+        config.headBranch = head;
+    }
+}
+
+const openPullRequest = async (config: ActionConfig): Promise<void> => {
+    let ghArgs: string[] = ['pr', 'create'];
+    if (config.specifyBase) {
+        ghArgs = [...ghArgs, '--base', config.baseBranch];
+    }
+    if (config.specifyHead) {
+        ghArgs = [...ghArgs, '--head', config.headBranch];
+    }
+    await exec.exec('gh', ghArgs);
+}
+
+const uploadChanges = async (config: ActionConfig): Promise<void> => {
     const method = core.getInput('method');
-    const branch = core.getInput('branch');
+    const head = core.getInput('head');
     if (method === 'push') {
         await exec.exec('git', ['add', '-A']);
         await exec.exec('git', ['commit', '-m', 'chore: duplicate files']);
         await exec.exec('git', ['push', '-f', '-u', 'origin']);
     } else if (method === 'pull_request') {
-        await exec.exec('git', ['checkout', '-b', branch]);
+        await exec.exec('git', ['checkout', '-b', head]);
         await exec.exec('git', ['add', '-A']);
         await exec.exec('git', ['commit', '-m', 'chore: duplicate files']);
-        await exec.exec('git', ['push', '-f', '-u', 'origin', branch]);
-        await exec.exec('gh', [
-            'pr', 'create',
-            '--base', 'main',
-            '--head', core.getInput('branch') as string,
-            '--title', 'chore: dup file',
-        ]);
+        await exec.exec('git', ['push', '-f', '-u', 'origin', head]);
+        await openPullRequest(config);
         core.info('Pull request opened.');
     } else if (method === 'dry_run') {
-        await exec.exec('git', ['checkout', '-b', branch]);
+        await exec.exec('git', ['checkout', '-b', head]);
         await exec.exec('git', ['add', '-A']);
         await exec.exec('git', ['commit', '-m', 'chore: duplicate files']);
         await exec.exec('gh', ['issue', 'list']);
@@ -75,6 +119,9 @@ const uploadChanges = async (): Promise<void> => {
 }
 
 const main = async (): Promise<void> => {
+    const config = createDefaultConfig();
+    getHeadBranch(config);
+    getBaseBranch(config);
     await configureGit();
     const configFiles = core.getInput('config_files');
     const globber = glob.create(configFiles, globOptions);
@@ -97,7 +144,7 @@ const main = async (): Promise<void> => {
         }
     }
     if (outdated) {
-        await uploadChanges();
+        await uploadChanges(config);
     } else {
         core.info('No change needed. Skip.');
     }
