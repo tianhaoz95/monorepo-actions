@@ -1,0 +1,26 @@
+name: Publish the Setup GitHub CLI action repository
+on:
+  push:
+    branches:
+      - "main"
+    paths:
+      - ".github/workflows/publish-action__setup-gh-cli.yml"
+      - "actions/setup-gh-cli/**"
+jobs:
+  publish-config-rules:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: install dependencies
+        working-directory: ./actions/setup-gh-cli
+        run: npm install && npm run build
+      - uses: cpina/github-action-push-to-another-repository@master
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.TIANHAOZ_GITHUB_TOKEN }}
+        with:
+          source-directory: "actions/setup-gh-cli"
+          destination-repository-username: "Monorepo-Actions"
+          destination-github-username: "tianhaoz95"
+          destination-repository-name: "setup-gh-cli"
+          target-branch: "main"
+          user-email: "tianhaoz@umich.edu"
