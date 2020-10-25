@@ -18,14 +18,15 @@ const configureGit = async (): Promise<void> => {
     const email = core.getInput('email');
     const username = core.getInput('username');
     const token = core.getInput('token');
-    await io.mkdirP('${HOME}/project_temp/file-dup-action/');
-    await exec.exec('echo', [token, '>', '${HOME}/project_temp/file-dup-action/token.txt']);
+    const homeDie = process.env['HOME'];
+    await io.mkdirP(`${homeDie}/project_temp/file-dup-action/`);
+    await exec.exec('echo', [token, '>', `${homeDie}/project_temp/file-dup-action/`]);
     core.info('Configure git profile.');
     await exec.exec('git', ['config', 'user.email', email]);
     await exec.exec('git', ['config', 'user.name', username]);
     await exec.exec('git', ['config', 'user.password', token]);
     core.info('Configure GitHub CLI.');
-    await exec.exec('gh auth login --with-token < ${HOME}/project_temp/file-dup-action/token.txt');
+    await exec.exec(`gh auth login --with-token < ${homeDie}/project_temp/file-dup-action/`);
 }
 
 const maybeDupFile = async (target: string, destFiles: string[]): Promise<boolean> => {
