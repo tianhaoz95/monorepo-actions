@@ -91,6 +91,8 @@ const openPullRequest = async (config: ActionConfig): Promise<void> => {
     if (config.specifyHead) {
         ghArgs = [...ghArgs, '--head', config.headBranch];
     }
+    ghArgs = [...ghArgs, '--title', '[Dup File Action] automated file duplication'];
+    ghArgs = [...ghArgs, '--body', 'File duplication'];
     await exec.exec('gh', ghArgs);
 }
 
