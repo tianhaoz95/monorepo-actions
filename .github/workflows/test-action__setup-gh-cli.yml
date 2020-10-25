@@ -1,0 +1,19 @@
+name: Test the Setup GitHub CLI action
+on:
+  push:
+    paths:
+      - ".github/workflows/test-action__setup-gh-cli.yml"
+      - "actions/setup-gh-cli/**"
+jobs:
+  sanity-check-setup-gh-cli:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: install dependencies
+        working-directory: ./actions/setup-gh-cli
+        run: npm install && npm run build
+      - uses: ./actions/setup-gh-cli
+        with:
+          token: ${{ secrets.TIANHAOZ_GITHUB_TOKEN }}
+      - name: run a few gh commands
+        run: gh issue list
