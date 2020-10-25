@@ -26,8 +26,8 @@ const main = async (): Promise<void> => {
     } else {
         const tokenDir = path.join(home, 'temp', 'setup_gh_cli');
         await io.mkdirP(tokenDir);
-        const tokenFile = path.join(tokenDir, 'token.txt', 'utf8');
-        fs.writeFileSync(tokenFile, token);
+        const tokenFile = path.join(tokenDir, 'token.txt');
+        fs.writeFileSync(tokenFile, token, 'utf8');
         await exec.exec(`gh auth login --with-token ${tokenFile}`, undefined, options);
     }
     core.info(`Standard output: ${infoOutput}`);
