@@ -18,15 +18,11 @@ const configureGit = async (): Promise<void> => {
     const email = core.getInput('email');
     const username = core.getInput('username');
     const token = core.getInput('token');
-    const homeDie = process.env['HOME'];
-    await io.mkdirP(`${homeDie}/project_temp/file-dup-action/`);
-    await exec.exec('echo', [token, '>', `${homeDie}/project_temp/file-dup-action/`]);
     core.info('Configure git profile.');
     await exec.exec('git', ['config', 'user.email', email]);
     await exec.exec('git', ['config', 'user.name', username]);
     await exec.exec('git', ['config', 'user.password', token]);
     core.info('Configure GitHub CLI.');
-    await exec.exec(`gh auth login --with-token < ${homeDie}/project_temp/file-dup-action/`);
 }
 
 const maybeDupFile = async (target: string, destFiles: string[]): Promise<boolean> => {
@@ -61,10 +57,18 @@ const uploadChanges = async (): Promise<void> => {
         await exec.exec('git', ['add', '-A']);
         await exec.exec('git', ['commit', '-m', 'chore: duplicate files']);
         await exec.exec('git', ['push', '-f', '-u', 'origin', branch]);
+        await exec.exec('gh', [
+            'pr', 'create',
+            '--base', 'main',
+            '--head', core.getInput('branch') as string,
+            '--title', 'chore: dup file',
+        ]);
+        core.info('Pull request opened.');
     } else if (method === 'dry_run') {
         await exec.exec('git', ['checkout', '-b', branch]);
         await exec.exec('git', ['add', '-A']);
         await exec.exec('git', ['commit', '-m', 'chore: duplicate files']);
+        await exec.exec('gh', ['issue', 'list']);
     } else {
         throw Error(`Method ${method} not found.`);
     }
@@ -94,15 +98,6 @@ const main = async (): Promise<void> => {
     }
     if (outdated) {
         await uploadChanges();
-        if (core.getInput('method') === 'pull_request') {
-            await exec.exec('gh', [
-                'pr', 'create',
-                '--base', 'main',
-                '--head', core.getInput('branch') as string,
-                '--title', 'chore: dup file',
-            ]);
-            core.info('Pull request opened.');
-        }
     } else {
         core.info('No change needed. Skip.');
     }
