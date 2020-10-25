@@ -1,0 +1,16 @@
+name: Test the Setup GitHub CLI action
+on:
+  push:
+    paths:
+      - ".github/workflows/test-action__setup-gh-cli.yml"
+      - "actions/setup-gh-cli/**"
+jobs:
+  sanity-check-config-rules:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./actions/setup-gh-cli
+        env:
+          GITHUB_TOKEN: ${{ secrets.TIANHAOZ_GITHUB_TOKEN }}
+        with:
+          rule_config: ./actions/config-rules/example-config.yml

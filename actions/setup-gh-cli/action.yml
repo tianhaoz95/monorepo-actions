@@ -1,0 +1,8 @@
+name: 'GitHub CLI Setup Action'
+description: 'GitHub action to setup GitHub CLI.'
+branding:
+  icon: check-square
+  color: green
+runs:
+  using: 'node12'
+  main: './lib/index.js'
