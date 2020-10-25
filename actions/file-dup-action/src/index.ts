@@ -65,7 +65,7 @@ const maybeDupFile = async (target: string, destFiles: string[]): Promise<boolea
 
 const getBaseBranch = (config: ActionConfig): void => {
     const base = core.getInput('base');
-    if (base === undefined) {
+    if (base === undefined || base === '') {
         config.specifyBase = false;
     } else {
         config.specifyBase = true;
@@ -75,7 +75,7 @@ const getBaseBranch = (config: ActionConfig): void => {
 
 const getHeadBranch = (config: ActionConfig): void => {
     const head = core.getInput('head');
-    if (head === undefined) {
+    if (head === undefined || head === '') {
         config.specifyHead = false;
     } else {
         config.specifyHead = true;
